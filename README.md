@@ -1,5 +1,5 @@
 # Dungeons-Jerzons
-The First Game from mah group of buddies.
+The First Game with mah group of buddies.
 
 Desarrollo:      Constante
 Horario:         Jueves 5:30pm - 8:30pm
