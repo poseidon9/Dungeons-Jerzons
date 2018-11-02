@@ -30,6 +30,8 @@ void Game::gameLoop()
 	Input input;
 	SDL_Event event;
 
+	this->_player = Sprite(graphics, "Imagenes/Sprites/walking/thebravewalk1.png", 0, 0, 64, 64, 50, 50);
+
 	int LAST_UPDATE_TIME = SDL_GetTicks();
 	//Start the game loop
 	while (true)
@@ -62,14 +64,20 @@ void Game::gameLoop()
 
 		const int CURRENT_TIME_MS = SDL_GetTicks();
 		int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
-
+		//std::min
+		this->update(std::_Min_value(ELAPSED_TIME_MS, MAX_FRAME_TIME));
 		LAST_UPDATE_TIME = CURRENT_TIME_MS;
+
+		this->draw(graphics);
 	}
 }
 
 void Game::draw(Graphics &graphics)
 {
+	graphics.clear();
+	this->_player.draw(graphics, 100, 100);
 
+	graphics.flip();
 }
 
 void Game::update(float elapsedTime)
