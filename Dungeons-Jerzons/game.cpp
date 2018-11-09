@@ -30,7 +30,7 @@ void Game::gameLoop()
 	Input input;
 	SDL_Event event;
 
-	this->_player = AnimatedSprite(graphics, "Imagenes/Sprites/walking/thebravewalk1.png", 0, 0, 64, 64, 100, 100, 100);
+	this->_player = AnimatedSprite(graphics, "Imagenes/Sprites/geruzon.png", 0, 0, 49, 49, 100, 100, 100);
 	this->_player.setupAnimations();
 	this->_player.playAnimation("RunLeft");
 
