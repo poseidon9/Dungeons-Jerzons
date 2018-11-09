@@ -30,6 +30,10 @@ void Game::gameLoop()
 	Input input;
 	SDL_Event event;
 
+	this->_player = AnimatedSprite(graphics, "Imagenes/Sprites/walking/thebravewalk1.png", 0, 0, 64, 64, 100, 100, 100);
+	this->_player.setupAnimations();
+	this->_player.playAnimation("RunLeft");
+
 	int LAST_UPDATE_TIME = SDL_GetTicks();
 	//Start the game loop
 	while (true)
@@ -60,20 +64,49 @@ void Game::gameLoop()
 			return;
 		}
 
+		/*	DELETE THIS CHUNK OF CODE
+			
+		*/
+		if (input.isKeyHeld(SDL_SCANCODE_A))
+		{
+			_player._x -= 1;
+		}
+		if (input.isKeyHeld(SDL_SCANCODE_W))
+		{
+			_player._y -= 1;
+		}
+		if (input.isKeyHeld(SDL_SCANCODE_D))
+		{
+			_player._x += 1;
+		}
+		if (input.isKeyHeld(SDL_SCANCODE_S))
+		{
+			_player._y += 1;
+		}
+		/*
+			DID U DELETE IT?
+		*/
+
 		const int CURRENT_TIME_MS = SDL_GetTicks();
 		int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
-
+		//std::min
+		this->update(std::_Min_value(ELAPSED_TIME_MS, MAX_FRAME_TIME));
 		LAST_UPDATE_TIME = CURRENT_TIME_MS;
+
+		this->draw(graphics);
 	}
 }
 
 void Game::draw(Graphics &graphics)
 {
+	graphics.clear();
+	this->_player.draw(graphics, this->_player._x, this->_player._y); //100, 100
 
+	graphics.flip();
 }
 
 void Game::update(float elapsedTime)
 {
-
+	this->_player.update(elapsedTime);
 }
 
