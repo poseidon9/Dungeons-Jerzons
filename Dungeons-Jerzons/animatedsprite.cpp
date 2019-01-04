@@ -97,15 +97,6 @@ void AnimatedSprite::draw(Graphics &graphics, int x, int y)
 	}
 }
 
-void AnimatedSprite::animationDone(std::string currentAnimation)
-{
-
-}
-
-void AnimatedSprite::setupAnimations()
-{
-	this->addAnimation(5, 0, 31, "RunLeft", 49, 49, Vector2(0, 0));
-}
 
 AnimatedSprite::~AnimatedSprite()
 {

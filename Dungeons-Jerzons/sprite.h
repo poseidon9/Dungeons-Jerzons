@@ -20,20 +20,13 @@ public:
 	virtual void update();
 	void draw(Graphics &graphics, int x, int y);
 
-	/*
-		SHOULD BE PRIVATE REMEMBER TO DELETE THIS!
-	*/
-	float _x, _y;
-	/*
-		PLS NO FORGETERINO!
-	*/
-
 protected:
 	SDL_Rect _sourceRect;
 	SDL_Texture* _spriteSheet;
+	float _x, _y;
 
-private:
-	//float _x, _y;
+//private:
+
 };
 
 #endif

@@ -4,14 +4,29 @@
 #include "graphics.h"
 #include "input.h"
 
+// !?!?!?
+#include <algorithm>
+// ?!?!?!
+
 /*  Game Class
 	This class holds all information for our main game loop.
 */
 namespace
 {
-	const int FPS = 50;
-	const int MAX_FRAME_TIME = 5 * 1000 / FPS;
+	const int FPS = 60;
+	const int MAX_FRAME_TIME = 5 * 1000 / FPS;	
 }
+
+enum Controls {
+	CONTROL_LEFT = SDL_SCANCODE_LEFT,
+	CONTROL_RIGHT = SDL_SCANCODE_RIGHT,
+	CONTROL_UP = SDL_SCANCODE_UP,
+	CONTROL_DOWN = SDL_SCANCODE_DOWN,
+	CONTROL_ATTACK = SDL_SCANCODE_Z,
+	CONTROL_JUMP = SDL_SCANCODE_X,
+	CONTROL_MAGIC = SDL_SCANCODE_C
+
+};
 
 Game::Game()
 {
@@ -30,9 +45,9 @@ void Game::gameLoop()
 	Input input;
 	SDL_Event event;
 
-	this->_player = AnimatedSprite(graphics, "Imagenes/Sprites/geruzon.png", 0, 0, 49, 49, 100, 100, 100);
-	this->_player.setupAnimations();
-	this->_player.playAnimation("RunLeft");
+	this->_player = Player(graphics, 100, 100);
+	this->_level = Level("map 1", Vector2(100,100), graphics);
+
 
 	int LAST_UPDATE_TIME = SDL_GetTicks();
 	//Start the game loop
@@ -63,34 +78,79 @@ void Game::gameLoop()
 		{
 			return;
 		}
+		
+		else if (input.isKeyHeld(CONTROL_RIGHT) == true)
+		{
+			if(input.wasKeyPressed(CONTROL_ATTACK) == true && input.wasKeyPressed(CONTROL_JUMP) == true)
+			{
+				printf("Rodar(Derecha)\n");			
+			}
+			else
+			{
+				this->_player.moveRight();
+			}
+		}
+		else if (input.isKeyHeld(CONTROL_LEFT) == true)
+		{
+			if (input.wasKeyPressed(CONTROL_ATTACK) == true && input.wasKeyPressed(CONTROL_JUMP) == true)
+			{
+				printf("Rodar(Izquierda)\n");
+			}
+			else
+			{
+				this->_player.moveLeft();
+			}
+		}
+		if (input.isKeyHeld(CONTROL_UP) == true)
+		{
+			if (input.wasKeyPressed(CONTROL_ATTACK) == true)
+			{
+				printf("SPECIAL ITEM\n");
+			}
+			else if (input.wasKeyPressed(CONTROL_MAGIC) == true)
+			{
+				printf("CARGA\n");
+			}
+		}
 
-		/*	DELETE THIS CHUNK OF CODE
-			
-		*/
-		if (input.isKeyHeld(SDL_SCANCODE_A))
+		else if (input.isKeyHeld(CONTROL_DOWN) == true)
 		{
-			_player._x -= 1;
+			if (input.wasKeyPressed(CONTROL_ATTACK) == true)
+			{
+				printf("ATAQUE BAJO\n");
+			}
+			else if (input.wasKeyPressed(CONTROL_JUMP) == true)
+			{
+				printf("BAJAR 1 Plataforma\n");
+			}
+			else if (input.wasKeyPressed(CONTROL_MAGIC) == true)
+			{
+				printf("Escudo\n");
+			}
 		}
-		if (input.isKeyHeld(SDL_SCANCODE_W))
+
+		if (!input.isKeyHeld(CONTROL_LEFT) && !input.isKeyHeld(CONTROL_RIGHT))
 		{
-			_player._y -= 1;
+			this->_player.stopMoving();
 		}
-		if (input.isKeyHeld(SDL_SCANCODE_D))
+
+		if (input.wasKeyPressed(CONTROL_MAGIC) == true)
 		{
-			_player._x += 1;
+			if (input.wasKeyPressed(CONTROL_ATTACK) == true)
+			{
+				printf("COMBO MAGIA/MELEE\n");
+			}
+			else
+			{
+				printf("BOTON\n");
+			}
 		}
-		if (input.isKeyHeld(SDL_SCANCODE_S))
-		{
-			_player._y += 1;
-		}
-		/*
-			DID U DELETE IT?
-		*/
 
 		const int CURRENT_TIME_MS = SDL_GetTicks();
 		int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
-		//std::min
-		this->update(std::_Min_value(ELAPSED_TIME_MS, MAX_FRAME_TIME));
+		int aux = std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME);
+
+		this->update(aux);
 		LAST_UPDATE_TIME = CURRENT_TIME_MS;
 
 		this->draw(graphics);
@@ -100,7 +160,8 @@ void Game::gameLoop()
 void Game::draw(Graphics &graphics)
 {
 	graphics.clear();
-	this->_player.draw(graphics, this->_player._x, this->_player._y); //100, 100
+	this->_level.draw(graphics);
+	this->_player.draw(graphics); //100, 100
 
 	graphics.flip();
 }
@@ -108,5 +169,6 @@ void Game::draw(Graphics &graphics)
 void Game::update(float elapsedTime)
 {
 	this->_player.update(elapsedTime);
+	this->_level.update(elapsedTime);
 }
 

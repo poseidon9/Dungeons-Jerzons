@@ -11,13 +11,13 @@ public:
 	void keyUpEvent(const SDL_Event& event);
 	void keyDownEvent(const SDL_Event& event);
 
-	bool wasKeyPressed(SDL_Scancode key);
-	bool wasKeyReleased(SDL_Scancode key);
-	bool isKeyHeld(SDL_Scancode key);
+	bool wasKeyPressed(int key);
+	bool wasKeyReleased(int key);
+	bool isKeyHeld(int key);
 private:
-	std::map<SDL_Scancode, bool> _heldKeys;
-	std::map<SDL_Scancode, bool> _pressedKeys;
-	std::map<SDL_Scancode, bool> _releasedKeys;
+	std::map<int, bool> _heldKeys;
+	std::map<int, bool> _pressedKeys;
+	std::map<int, bool> _releasedKeys;
 };
 
 #endif
